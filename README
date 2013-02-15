@@ -1,0 +1,38 @@
+Lightweight API Framework
+=========================
+Get an API off the ground today with this easy-to-use framework. Add your endpoints to application/endpoints, create models to get your data and respond with JSON (everyone's favorite format!).
+
+Path Translation
+================
+/{endpoints_class}/{method}/?params
+	
+Your Code
+=========
+/application
+	endpoints/
+		*.php - classes that are autoloaded and map to url request endpoint and method
+			e.g. dummy.php
+				class endpoint_dummy extends base_endpoint
+				{
+					protected $_path = '/dummy';
+					public function sayhi_endpoint( $request_vars )
+					{
+						return array(
+							'message' => 'Hello World!'
+						);
+					}
+				}
+
+				Endpoint will respond to http://{SERVER_NAME}/dummy/sayhi?api_key={KEY}
+	models/
+		No strict requirements here, these are just autoloaded models to be used in the endpoints
+
+/library
+	this is the core functionality of the API as well as some utilities
+	application.php - 'main' class, loads endpoints (from /application/endpoints) and processes their logic
+	curl - request class, curl::get(url, [headers, port]) curl::post(url, data=[], [headers, port]), extend this class to make API requests easier
+	registry - managed storage (lifespan: request) registry::set('key', $value) registry::get('key', [DEFAULT_VALUE])
+	session - wrapper around the session, same interface as registry
+	response - response::send(json_encoded data), response::message('message'), response::error('error message')
+	server - wrapper around $_SERVER (can use lowercase on keys)
+	logger - logger has four public static methods, set_log_dir($path), debug($object/$array), log($message, $bucket='default'), time($item, $start, $end)
